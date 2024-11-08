@@ -2,7 +2,7 @@ import { conectaAPI } from "./conectaAPI.js";
 
 const lista = document.querySelector("[data-lista]");
 
-function construyeCard(titulo,descripcion,url,imagen){
+export default function construyeCard(titulo,descripcion,url,imagen){
     const video = document.createElement("li");
     video.className="videos__item";
     
@@ -21,8 +21,14 @@ function construyeCard(titulo,descripcion,url,imagen){
 
 
 async function listaVideos(){
-    const listaAPI = await conectaAPI.listaVideos();
-    listaAPI.forEach(element => lista.appendChild(construyeCard(element.titulo,element.descripcion,element.url,element.imagen)));
+    try{
+        const listaAPI = await conectaAPI.listaVideos();
+
+        listaAPI.forEach(element => lista.appendChild(construyeCard(element.titulo,element.descripcion,element.url,element.imagen)));
+    }
+    catch(error){
+        lista.innerHTML = `<h2 class = "mensaje__titulo">Ha ocurrido un error de conexión :(</h2>`
+    }
 }
 
 listaVideos();
