@@ -13,10 +13,11 @@ async function listaVideos(){
 }
 
 async function crearVideo(titulo,descripcion,url,imagen){
+
     const conexion= await fetch("http://localhost:3001/videos",{
     method:"POST",
     headers:{
-        "Content-type":"application/json",
+        "Content-type": "application/json"
     },
     body:JSON.stringify({
         titulo:titulo,
@@ -25,7 +26,9 @@ async function crearVideo(titulo,descripcion,url,imagen){
         imagen:imagen
     })
     })
-
+    if(!conexion.ok){
+        throw new Error("No fue posible enviar el video");
+    }
     const conexionConvertida = await conexion.json();
 
     if(!conexion.ok){
@@ -43,6 +46,13 @@ async function buscarVideos(palabraClave){
     return conexionConvertida;
 }
 
+async function buscarVideo(referencia){
+    const conexion=await fetch(`http://localhost:3001/videos?q=${referencia}`)
+    const conexionConvertida=conexion.json();
+
+    return conexionConvertida;
+}
+
 export const conectaAPI={
-    listaVideos, crearVideo, buscarVideos
+    listaVideos,crearVideo,buscarVideo
 }
